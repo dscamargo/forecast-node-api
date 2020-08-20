@@ -3,17 +3,17 @@ import mongoose from 'mongoose';
 import { CUSTOM_VALIDATION } from '@src/models/user';
 
 export abstract class BaseController {
-  protected sendCreatedUpdatedErrorResponse(
+  protected sendCreateUpdateErrorResponse(
     res: Response,
     error: mongoose.Error.ValidationError | Error
   ): void {
     if (error instanceof mongoose.Error.ValidationError) {
-      const clientError = this.handleClientErrors(error);
+      const clientErrors = this.handleClientErrors(error);
       res
-        .status(clientError.code)
-        .json({ code: clientError.code, error: clientError.error });
+        .status(clientErrors.code)
+        .send({ code: clientErrors.code, error: clientErrors.error });
     } else {
-      res.status(500).send({ code: 500, error: 'Something went wrong !' });
+      res.status(500).send({ code: 500, error: 'Something went wrong!' });
     }
   }
 
@@ -23,14 +23,9 @@ export abstract class BaseController {
     const duplicatedKindErrors = Object.values(error.errors).filter(
       (err) => err.kind === CUSTOM_VALIDATION.DUPLICATED
     );
-
     if (duplicatedKindErrors.length) {
-      return {
-        code: 409,
-        error: error.message,
-      };
-    } else {
-      return { code: 422, error: error.message };
+      return { code: 409, error: error.message };
     }
+    return { code: 422, error: error.message };
   }
 }
