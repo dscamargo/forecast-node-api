@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import config from 'config';
+import jwt from 'jsonwebtoken';
 import { User } from '@src/models/user';
 
+//version of the user that is send to via API and decoded from the Json Web Token
 export interface DecodedUser extends Omit<User, '_id'> {
   id: string;
 }
@@ -13,14 +13,14 @@ export default class AuthService {
     password: string,
     salt = 10
   ): Promise<string> {
-    return bcrypt.hash(password, salt);
+    return await bcrypt.hash(password, salt);
   }
 
   public static async comparePasswords(
     password: string,
     hashedPassword: string
   ): Promise<boolean> {
-    return bcrypt.compare(password, hashedPassword);
+    return await bcrypt.compare(password, hashedPassword);
   }
 
   public static generateToken(payload: object): string {
@@ -29,7 +29,7 @@ export default class AuthService {
     });
   }
 
-  public static decodedToken(token: string): DecodedUser {
+  public static decodeToken(token: string): DecodedUser {
     return jwt.verify(token, config.get('App.auth.key')) as DecodedUser;
   }
 }
