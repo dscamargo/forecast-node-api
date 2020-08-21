@@ -3,7 +3,7 @@ import stormGlassNormalizedResponseFixture from '@test/fixtures/stormGlassFixtur
 import { Forecast, ForecastProcessingInternalError } from './forecast';
 import { Beach, BeachPosition } from '@src/models/beach';
 
-jest.mock('@src/clients/StormGlass');
+jest.mock('@src/clients/stormGlass');
 
 describe('Forecast Service', () => {
   const mockedStormGlassService = new StormGlass() as jest.Mocked<StormGlass>;
