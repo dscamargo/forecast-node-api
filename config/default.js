@@ -1,4 +1,6 @@
-{
+require('dotenv').config();
+
+module.exports = {
   "App": {
     "port": 3000,
     "database": {

@@ -6,11 +6,14 @@ const dbConfig: IConfig = config.get('App.database');
 console.log(dbConfig.get('mongoUrl'))
 console.log(dbConfig.get('mongoUrl'))
 
-export const connect = async (): Promise<typeof mongoose> =>
-  await mongoose.connect(dbConfig.get('mongoUrl'), {
+export const connect = async (): Promise<typeof mongoose> => {
+  const connection = await mongoose.connect(dbConfig.get('mongoUrl'), {
     useCreateIndex: true,
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
+  // console.log('Database connected')
+  return connection;
+}
 
 export const close = (): Promise<void> => mongoose.connection.close();
