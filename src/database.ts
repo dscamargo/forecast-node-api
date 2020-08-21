@@ -1,9 +1,9 @@
 import config, { IConfig } from 'config';
-import mongoose, { Mongoose } from 'mongoose';
+import mongoose from 'mongoose';
 
 const dbConfig: IConfig = config.get('App.database');
 
-export const connect = async (): Promise<Mongoose> =>
+export const connect = async (): Promise<typeof mongoose> =>
   await mongoose.connect(dbConfig.get('mongoUrl'), {
     useCreateIndex: true,
     useNewUrlParser: true,

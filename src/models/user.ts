@@ -1,4 +1,4 @@
-import mongoose, { Document, Model } from 'mongoose';
+import mongoose, { model, Document } from 'mongoose';
 import AuthService from '@src/services/auth';
 
 export interface User {
@@ -19,8 +19,8 @@ const schema = new mongoose.Schema(
     name: { type: String, required: true },
     email: {
       type: String,
-      required: true,
       unique: [true, 'Email must be unique'],
+      required: true,
     },
     password: { type: String, required: true },
   },
@@ -35,28 +35,26 @@ const schema = new mongoose.Schema(
   }
 );
 
-/**
- * Validates the email and throws a validation error, otherwise it will throw a 500
- */
+schema.pre<UserModel>('save', async function (): Promise<void> {
+  if (!this.password || !this.isModified('password')) {
+    return;
+  }
+
+  try {
+    const hashedPassword = await AuthService.hashPassword(this.password);
+    this.password = hashedPassword;
+  } catch (error) {
+    console.error(`Error hashing the password for the user ${this.password}`);
+  }
+});
+
 schema.path('email').validate(
   async (email: string) => {
     const emailCount = await mongoose.models.User.countDocuments({ email });
     return !emailCount;
   },
-  'already exists in the database.',
+  'already exists in the database',
   CUSTOM_VALIDATION.DUPLICATED
 );
 
-schema.pre<UserModel>('save', async function (): Promise<void> {
-  if (!this.password || !this.isModified('password')) {
-    return;
-  }
-  try {
-    const hashedPassword = await AuthService.hashPassword(this.password);
-    this.password = hashedPassword;
-  } catch (err) {
-    console.error(`Error hashing the password for the user ${this.name}`, err);
-  }
-});
-
-export const User: Model<UserModel> = mongoose.model('User', schema);
+export default model<UserModel>('User', schema);

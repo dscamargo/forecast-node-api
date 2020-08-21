@@ -1,16 +1,16 @@
 import { Controller, Get, ClassMiddleware } from '@overnightjs/core';
 import { Request, Response } from 'express';
-import { Beach } from '@src/models/beach';
 import { Forecast } from '@src/services/forecast';
-import { authMiddleware } from '@src/middlewares/auth';
+import Beach from '@src/models/beach';
+import AuthMiddleware from '@src/middlewares/auth';
 
 const forecast = new Forecast();
 
 @Controller('forecast')
-@ClassMiddleware(authMiddleware)
+@ClassMiddleware(AuthMiddleware)
 export class ForecastController {
-  @Get('')
-  public async getForecastForgeLoggedUser(
+  @Get()
+  public async getForecastForLoggedUser(
     req: Request,
     res: Response
   ): Promise<void> {
@@ -19,7 +19,7 @@ export class ForecastController {
       const forecastData = await forecast.processForecastForBeaches(beaches);
       res.status(200).send(forecastData);
     } catch (error) {
-      res.status(500).send({ error: 'Something went wrong' });
+      res.status(500).send({ error: 'Something went wrong !' });
     }
   }
 }
