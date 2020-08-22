@@ -33,7 +33,7 @@
   "dependencies": {
     "@overnightjs/core": "^1.7.4",
     "@types/bcrypt": "^3.0.0",
-    "@types/cors": "^2.8.6",
+    "@types/cors": "^2.8.7",
     "@types/http-status-codes": "^1.2.0",
     "axios": "^0.19.2",
     "bcrypt": "^5.0.0",

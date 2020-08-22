@@ -1,5 +1,6 @@
 import user from '@src/models/user';
 import AuthService from '@src/services/auth';
+import httpStatusCodes from 'http-status-codes'
 
 describe('User functional tests', () => {
   beforeEach(async () => await user.deleteMany({}));
@@ -31,7 +32,8 @@ describe('User functional tests', () => {
       expect(response.status).toBe(422);
       expect(response.body).toEqual({
         code: 422,
-        error: 'User validation failed: name: Path `name` is required.',
+        error: httpStatusCodes.getStatusText(422),
+        message: 'User validation failed: name: Path `name` is required.',
       });
     });
 
@@ -47,7 +49,8 @@ describe('User functional tests', () => {
       expect(response.status).toBe(409);
       expect(response.body).toEqual({
         code: 409,
-        error: 'User validation failed: email: already exists in the database',
+        error: httpStatusCodes.getStatusText(409),
+        message: 'User validation failed: email: already exists in the database',
       });
     });
   });
@@ -76,7 +79,8 @@ describe('User functional tests', () => {
       expect(response.status).toBe(401);
       expect(response.body).toEqual({
         code: 401,
-        error: 'User not found',
+        error: httpStatusCodes.getStatusText(401),
+        message: 'User not found',
       });
     });
     it('should return UNAUTHORIZED status if password does not match', async () => {
@@ -94,7 +98,8 @@ describe('User functional tests', () => {
       expect(response.status).toBe(401);
       expect(response.body).toEqual({
         code: 401,
-        error: 'Invalid credentials',
+        error: httpStatusCodes.getStatusText(401),
+        message: 'Invalid credentials',
       });
     });
   });

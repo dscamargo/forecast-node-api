@@ -1,6 +1,7 @@
 import Beach from '@src/models/beach';
 import AuthService from '@src/services/auth';
 import User from '@src/models/user';
+import httpStatusCodes from 'http-status-codes'
 
 let token: string;
 describe('Beaches functional tests', () => {
@@ -53,7 +54,8 @@ describe('Beaches functional tests', () => {
       expect(response.status).toBe(422);
       expect(response.body).toEqual({
         code: 422,
-        error:
+        error: httpStatusCodes.getStatusText(422),
+        message:
           'Beach validation failed: lat: Cast to Number failed for value "invalid-string" at path "lat"',
       });
     });

@@ -4,6 +4,7 @@ import User from '@src/models/user';
 import Mongoose from 'mongoose';
 import { BaseController } from '.';
 import AuthService from '@src/services/auth';
+import ApiError from '@src/util/errors/api-error';
 
 @Controller('users')
 export class UserController extends BaseController {
@@ -23,17 +24,17 @@ export class UserController extends BaseController {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(401).send({
+      return this.sendErrorResponse(res,{
         code: 401,
-        error: 'User not found',
-      });
+        message: 'User not found',
+      })
     }
 
     if (!(await AuthService.comparePasswords(password, user.password))) {
-      return res.status(401).send({
+      return this.sendErrorResponse(res, {
         code: 401,
-        error: 'Invalid credentials',
-      });
+        message: 'Invalid credentials',
+      })
     }
 
     const token = AuthService.generateToken(user.toJSON());
