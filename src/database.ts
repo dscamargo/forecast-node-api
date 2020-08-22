@@ -1,5 +1,6 @@
 import config, { IConfig } from 'config';
 import mongoose from 'mongoose';
+import logger from './logger';
 
 const dbConfig: IConfig = config.get('App.database');
 
@@ -10,7 +11,7 @@ export const connect = async (): Promise<typeof mongoose> => {
     useUnifiedTopology: true,
   });
   if (process.env.NODE_ENV !== 'test'){
-    console.log('Database connected')
+    logger.info('Database connected')
   }
   return connection
 }

@@ -6,6 +6,10 @@ module.exports = {
     "database": {
       "mongoUrl": "mongodb://localhost:27017/surf-forecast"
     },
+    "logger": {
+      "enabled": true,
+      "level": "info"
+    },
     "auth": {
       "key": "node-js-secret-app-key",
       "tokenExpiresIn": "1d"

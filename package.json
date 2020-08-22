@@ -7,7 +7,7 @@
     "test": "yarn test:unit && yarn test:functional",
     "test:functional": "jest --projects ./test --runInBand",
     "test:unit": "jest",
-    "start:dev": "ts-node-dev src/index.ts",
+    "start:dev": "ts-node-dev --respawn --transpile-only 'src/index.ts' | pino-pretty -c",
     "lint": "eslint ./src ./test --ext .ts",
     "lint:fix": "eslint ./src ./test --ext .ts --fix",
     "build": "tsc",
@@ -51,7 +51,7 @@
     "module-alias": "^2.2.2",
     "moment": "^2.27.0",
     "mongoose": "^5.9.18",
-    "pino": "^6.3.2",
+    "pino": "^6.5.1",
     "swagger-ui-express": "^4.1.4"
   },
   "devDependencies": {
@@ -79,7 +79,7 @@
     "eslint": "^6.8.0",
     "jest": "^26.0.1",
     "nock": "^12.0.3",
-    "pino-pretty": "^4.0.0",
+    "pino-pretty": "^4.1.0",
     "prettier": "^2.0.5",
     "supertest": "^4.0.2",
     "ts-jest": "^26.0.0",
