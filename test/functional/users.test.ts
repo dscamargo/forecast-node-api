@@ -1,6 +1,6 @@
 import user from '@src/models/user';
 import AuthService from '@src/services/auth';
-import httpStatusCodes from 'http-status-codes'
+import httpStatusCodes from 'http-status-codes';
 
 describe('User functional tests', () => {
   beforeEach(async () => await user.deleteMany({}));
@@ -50,7 +50,8 @@ describe('User functional tests', () => {
       expect(response.body).toEqual({
         code: 409,
         error: httpStatusCodes.getStatusText(409),
-        message: 'User validation failed: email: already exists in the database',
+        message:
+          'User validation failed: email: already exists in the database',
       });
     });
   });
@@ -101,6 +102,41 @@ describe('User functional tests', () => {
         error: httpStatusCodes.getStatusText(401),
         message: 'Invalid credentials',
       });
+    });
+  });
+  describe('When getting user profile info', () => {
+    it('should return the logged user profit informations', async () => {
+      const newUser = {
+        name: 'John doe',
+        email: 'john@email.com',
+        password: '1234',
+      };
+      const User = await new user(newUser).save();
+      const token = await AuthService.generateToken(User.toJSON());
+      const { body, status } = await global.testRequest.get('/users/me').set({
+        'x-access-token': token,
+      });
+
+      expect(status).toBe(200);
+      expect(body).toMatchObject(JSON.parse(JSON.stringify({ user: User })));
+    });
+
+    it('should return not found when the user not found', async () => {
+      const newUser = {
+        name: 'John doe',
+        email: 'john@email.com',
+        password: '1234',
+      };
+
+      // Cria o usuário, mas não salva...
+      const User = await new user(newUser);
+      const token = await AuthService.generateToken(User.toJSON());
+      const { body, status } = await global.testRequest.get('/users/me').set({
+        'x-access-token': token,
+      });
+
+      expect(status).toBe(404);
+      expect(body.message).toBe('User not found');
     });
   });
 });

@@ -56,7 +56,6 @@ export class StormGlass {
     'swellDirection,swellHeight,swellPeriod,waveDirection,waveHeight,windDirection,windSpeed';
   readonly stormGlassAPISource = 'noaa';
 
-
   constructor(protected request = new HTTPUtil.Request()) {}
   public async fetchPoints(lat: number, lng: number): Promise<ForecastPoint[]> {
     try {
@@ -73,9 +72,7 @@ export class StormGlass {
         }
       );
 
-      const normalizedData = this.normalizeResponse(data);
-
-      return normalizedData;
+      return this.normalizeResponse(data);
     } catch (err) {
       if (HTTPUtil.Request.isRequestError(err)) {
         throw new StormGlassResponseError(

@@ -21,8 +21,11 @@ export class ForecastController extends BaseController {
       const forecastData = await forecast.processForecastForBeaches(beaches);
       res.status(200).send(forecastData);
     } catch (error) {
-      logger.error(error)
-      this.sendErrorResponse(res,{code: 500, message: 'Something went wrong'})
+      logger.error(error);
+      this.sendErrorResponse(res, {
+        code: 500,
+        message: 'Something went wrong',
+      });
     }
   }
 }

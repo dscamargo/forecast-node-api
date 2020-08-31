@@ -11,12 +11,19 @@ export abstract class BaseController {
   ): void {
     if (error instanceof mongoose.Error.ValidationError) {
       const clientError = this.handleClientErrors(error);
-      res
-        .status(clientError.code)
-        .json(ApiError.format({ code: clientError.code, message: clientError.error }));
+      res.status(clientError.code).json(
+        ApiError.format({
+          code: clientError.code,
+          message: clientError.error,
+        })
+      );
     } else {
-      logger.error(error)
-      res.status(500).send(ApiError.format({ code: 500, message: 'Something went wrong !' }));
+      logger.error(error);
+      res
+        .status(500)
+        .send(
+          ApiError.format({ code: 500, message: 'Something went wrong !' })
+        );
     }
   }
 
@@ -37,7 +44,7 @@ export abstract class BaseController {
     }
   }
 
-  protected sendErrorResponse(res: Response,error: APIError):Response {
-    return res.status(error.code).send(ApiError.format(error))
+  protected sendErrorResponse(res: Response, error: APIError): Response {
+    return res.status(error.code).send(ApiError.format(error));
   }
 }

@@ -10,10 +10,10 @@ export const connect = async (): Promise<typeof mongoose> => {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
-  if (process.env.NODE_ENV !== 'test'){
-    logger.info('Database connected')
+  if (process.env.NODE_ENV !== 'test') {
+    logger.info('Database connected');
   }
-  return connection
-}
+  return connection;
+};
 
 export const close = (): Promise<void> => mongoose.connection.close();
